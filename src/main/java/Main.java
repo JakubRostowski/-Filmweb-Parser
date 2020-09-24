@@ -8,7 +8,7 @@ public class Main {
     private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) throws IOException {
-        System.out.println("Hello! This program takes the Filmweb TOP500 list and exports it to excel file." +
+        System.out.println("Hello! This program takes the Filmweb TOP500 list and exports it to an excel file." +
                 "\nWould like to get the whole toplist? Please type \"yes\" or \"no\".");
 
         boolean isWhole = true;
