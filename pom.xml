@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.rasty</groupId>
-    <artifactId>Filmweb Parser</artifactId>
-    <version>1.0</version>
+    <artifactId>Filmweb Scraper</artifactId>
+    <version>1.0.1</version>
 
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
