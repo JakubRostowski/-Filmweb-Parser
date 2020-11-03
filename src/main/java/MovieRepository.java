@@ -35,7 +35,7 @@ public class MovieRepository {
             for (int i=1; i<=maxPage; i++) {
                 Connection connectList = Jsoup.connect(URL + "/ajax/ranking/film/" + i);
                 Document documentList = connectList.get();
-                Elements urls = documentList.select(".film__link");
+                Elements urls = documentList.select("div:nth-child(3) > div:nth-child(1) > h2:nth-child(1) > a:nth-child(1)");
                 for (Element href : urls) {
                     Connection connectMovie = Jsoup.connect(URL + href.attr("href"));
                     Document documentMovie = connectMovie.get();
@@ -51,11 +51,20 @@ public class MovieRepository {
                         criticsRate = -1;
                     }
                     String length = documentMovie.select(".filmCoverSection__filmTime").text().replaceAll("godz.","h").replaceAll("min.","min");
-                    String director = documentMovie.select(".filmPosterSection__info > div:nth-child(2)").text().replaceAll("więcej", "");
-                    String screenwriter = documentMovie.select(".filmPosterSection__info > div:nth-child(4)").text().replaceAll("więcej", "");
-                    String genre = documentMovie.select(".filmPosterSection__info > div:nth-child(6)").text();
-                    String countryOfOrigin = documentMovie.select(".filmPosterSection__info > div:nth-child(8)").text();
-
+                    String director = documentMovie.select("div.filmInfo__info:nth-child(3)").text().replaceAll("więcej", "");
+                    String screenwriter = "";
+                    String genre = "";
+                    String countryOfOrigin = "";
+                    if (director.isEmpty()) {
+                        director = documentMovie.select(".filmPosterSection__info > div:nth-child(2)").text().replaceAll("więcej", "");
+                        screenwriter = documentMovie.select(".filmPosterSection__info > div:nth-child(4)").text().replaceAll("więcej", "");
+                        genre = documentMovie.select("div.filmInfo__info:nth-child(6)").text();
+                        countryOfOrigin = documentMovie.select("div.filmInfo__info:nth-child(8)").text();
+                    } else {
+                        screenwriter = documentMovie.select("div.filmInfo__info:nth-child(5)").text().replaceAll("więcej", "");
+                        genre = documentMovie.select("div.filmInfo__info:nth-child(7)").text();
+                        countryOfOrigin = documentMovie.select("div.filmInfo__info:nth-child(9)").text();
+                    }
                     listOfMovies.add(new Movie(title,year,originalTitle,rate,criticsRate,length,director,screenwriter,genre,countryOfOrigin));
 
                     moviesLeft--;
