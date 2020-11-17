@@ -163,7 +163,7 @@ public class MovieRepository {
         }
     }
 
-    public String[] getHeaders(){
+    private String[] getHeaders(){
         String[] array;
         array = new String [11];
         array[0] = "Rank";
