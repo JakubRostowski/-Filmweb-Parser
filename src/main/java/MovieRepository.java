@@ -82,7 +82,7 @@ public class MovieRepository {
     }
 
     public void exportToExcel(List<Movie> list, boolean IsNewExcelFormat) throws IOException{
-        Workbook workbook = getWorkbookObject(IsNewExcelFormat);
+        Workbook workbook = createWorkbookObject(IsNewExcelFormat);
         Sheet sheet = workbook.createSheet("Toplist");
         setHeader(sheet);
 
@@ -131,14 +131,18 @@ public class MovieRepository {
             rank++;
         }
 
-        for(int i = 0; i < getHeaders().length; i++) {
-            sheet.autoSizeColumn(i);
-        }
+        autoSizeColumns(sheet);
 
         FileOutputStream fileOut = getFileExtension(IsNewExcelFormat);
         workbook.write(fileOut);
         fileOut.close();
         workbook.close();
+    }
+
+    private void autoSizeColumns(Sheet sheet) {
+        for(int i = 0; i < getHeaders().length; i++) {
+            sheet.autoSizeColumn(i);
+        }
     }
 
     private void setHeader(Sheet sheet) {
@@ -150,7 +154,7 @@ public class MovieRepository {
         }
     }
 
-    private Workbook getWorkbookObject(boolean IsNewExcelFormat) {
+    private Workbook createWorkbookObject(boolean IsNewExcelFormat) {
             if (IsNewExcelFormat) {
                 return new XSSFWorkbook();
             } else {
