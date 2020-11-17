@@ -37,7 +37,6 @@ public class MovieRepository {
                 Document documentList = connectList.get();
                 Elements urls = documentList.select("div:nth-child(3) > div:nth-child(1) > h2:nth-child(1) > a:nth-child(1)");
                 for (Element href : urls) {
-                    getMovieData(href);
                     listOfMovies.add(getMovieData(href));
 
                     moviesLeft--;
@@ -82,14 +81,8 @@ public class MovieRepository {
         return new Movie(title,year,originalTitle,rate,criticsRate,length,director,screenwriter,genre,countryOfOrigin);
     }
 
-    public void exportToExcel(List<Movie> list, boolean newExcelFormat) throws IOException{
-        Workbook workbook = null;
-        if (newExcelFormat) {
-            workbook = new XSSFWorkbook();
-        } else if (!newExcelFormat) {
-            workbook = new HSSFWorkbook();
-        }
-
+    public void exportToExcel(List<Movie> list, boolean IsNewExcelFormat) throws IOException{
+        Workbook workbook = getWorkbookObject(IsNewExcelFormat);
         Sheet sheet = workbook.createSheet("Toplist");
 
         Row rowHeader = sheet.createRow(0);
@@ -148,16 +141,26 @@ public class MovieRepository {
             sheet.autoSizeColumn(i);
         }
 
-        FileOutputStream fileOut = null;
-        if (newExcelFormat) {
-            fileOut = new FileOutputStream("toplist.xlsx");
-        } else if (!newExcelFormat) {
-            fileOut = new FileOutputStream("toplist.xls");
-        }
-
+        FileOutputStream fileOut = getFileExtension(IsNewExcelFormat);
         workbook.write(fileOut);
         fileOut.close();
         workbook.close();
+    }
+
+    private Workbook getWorkbookObject(boolean IsNewExcelFormat) {
+            if (IsNewExcelFormat) {
+                return new XSSFWorkbook();
+            } else {
+                return new HSSFWorkbook();
+            }
+    }
+
+    private FileOutputStream getFileExtension(boolean IsNewExcelFormat) throws IOException{
+        if (IsNewExcelFormat) {
+            return new FileOutputStream("toplist.xlsx");
+        } else {
+            return new FileOutputStream("toplist.xls");
+        }
     }
 
     public String[] getHeaders(){
