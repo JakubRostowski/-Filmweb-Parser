@@ -85,9 +85,9 @@ public class MovieRepository {
     public void exportToExcel(List<Movie> list, boolean newExcelFormat) throws IOException{
         Workbook workbook = null;
         if (newExcelFormat) {
-            workbook = new HSSFWorkbook();
-        } else if (!newExcelFormat) {
             workbook = new XSSFWorkbook();
+        } else if (!newExcelFormat) {
+            workbook = new HSSFWorkbook();
         }
 
         Sheet sheet = workbook.createSheet("Toplist");
@@ -148,7 +148,13 @@ public class MovieRepository {
             sheet.autoSizeColumn(i);
         }
 
-        FileOutputStream fileOut = new FileOutputStream("toplist.xls");
+        FileOutputStream fileOut = null;
+        if (newExcelFormat) {
+            fileOut = new FileOutputStream("toplist.xlsx");
+        } else if (!newExcelFormat) {
+            fileOut = new FileOutputStream("toplist.xls");
+        }
+
         workbook.write(fileOut);
         fileOut.close();
         workbook.close();
