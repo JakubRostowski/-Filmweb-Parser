@@ -66,9 +66,9 @@ public class MovieRepository {
         }
         String length = documentMovie.select(".filmCoverSection__filmTime").text().replaceAll("godz.","h").replaceAll("min.","min");
         String director = documentMovie.select("div.filmInfo__info:nth-child(3)").text().replaceAll("więcej", "");
-        String screenwriter = "";
-        String genre = "";
-        String countryOfOrigin = "";
+        String screenwriter;
+        String genre;
+        String countryOfOrigin;
         if (director.isEmpty()) {
             director = documentMovie.select(".filmPosterSection__info > div:nth-child(2)").text().replaceAll("więcej", "");
             screenwriter = documentMovie.select(".filmPosterSection__info > div:nth-child(4)").text().replaceAll("więcej", "");
