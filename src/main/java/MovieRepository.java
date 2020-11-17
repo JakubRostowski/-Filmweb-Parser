@@ -37,35 +37,8 @@ public class MovieRepository {
                 Document documentList = connectList.get();
                 Elements urls = documentList.select("div:nth-child(3) > div:nth-child(1) > h2:nth-child(1) > a:nth-child(1)");
                 for (Element href : urls) {
-                    Connection connectMovie = Jsoup.connect(URL + href.attr("href"));
-                    Document documentMovie = connectMovie.get();
-
-                    String title = documentMovie.select(".filmCoverSection__title > span:nth-child(1)").text();
-                    int year = Integer.parseInt(documentMovie.select(".filmCoverSection__year").text());
-                    String originalTitle = documentMovie.select(".filmCoverSection__orginalTitle").text();
-                    double rate = Double.parseDouble(documentMovie.select("span.filmRating__rateValue:nth-child(2)").text().replaceAll(",","."));
-                    double criticsRate;
-                    if (documentMovie.select("span.filmRating__rateValue:nth-child(1)").text().contains(",")) {
-                        criticsRate = Double.parseDouble(documentMovie.select("span.filmRating__rateValue:nth-child(1)").text().replaceAll(",", "."));
-                    } else {
-                        criticsRate = -1;
-                    }
-                    String length = documentMovie.select(".filmCoverSection__filmTime").text().replaceAll("godz.","h").replaceAll("min.","min");
-                    String director = documentMovie.select("div.filmInfo__info:nth-child(3)").text().replaceAll("więcej", "");
-                    String screenwriter = "";
-                    String genre = "";
-                    String countryOfOrigin = "";
-                    if (director.isEmpty()) {
-                        director = documentMovie.select(".filmPosterSection__info > div:nth-child(2)").text().replaceAll("więcej", "");
-                        screenwriter = documentMovie.select(".filmPosterSection__info > div:nth-child(4)").text().replaceAll("więcej", "");
-                        genre = documentMovie.select("div.filmInfo__info:nth-child(6)").text();
-                        countryOfOrigin = documentMovie.select("div.filmInfo__info:nth-child(8)").text();
-                    } else {
-                        screenwriter = documentMovie.select("div.filmInfo__info:nth-child(5)").text().replaceAll("więcej", "");
-                        genre = documentMovie.select("div.filmInfo__info:nth-child(7)").text();
-                        countryOfOrigin = documentMovie.select("div.filmInfo__info:nth-child(9)").text();
-                    }
-                    listOfMovies.add(new Movie(title,year,originalTitle,rate,criticsRate,length,director,screenwriter,genre,countryOfOrigin));
+                    getMovieData(href);
+                    listOfMovies.add(getMovieData(href));
 
                     moviesLeft--;
                     if(moviesLeft == 0) {
@@ -75,6 +48,38 @@ public class MovieRepository {
             }
         }
         return null;
+    }
+
+    private Movie getMovieData(Element href) throws IOException {
+        Connection connectMovie = Jsoup.connect(URL + href.attr("href"));
+        Document documentMovie = connectMovie.get();
+
+        String title = documentMovie.select(".filmCoverSection__title > span:nth-child(1)").text();
+        int year = Integer.parseInt(documentMovie.select(".filmCoverSection__year").text());
+        String originalTitle = documentMovie.select(".filmCoverSection__orginalTitle").text();
+        double rate = Double.parseDouble(documentMovie.select("span.filmRating__rateValue:nth-child(2)").text().replaceAll(",","."));
+        double criticsRate;
+        if (documentMovie.select("span.filmRating__rateValue:nth-child(1)").text().contains(",")) {
+            criticsRate = Double.parseDouble(documentMovie.select("span.filmRating__rateValue:nth-child(1)").text().replaceAll(",", "."));
+        } else {
+            criticsRate = -1;
+        }
+        String length = documentMovie.select(".filmCoverSection__filmTime").text().replaceAll("godz.","h").replaceAll("min.","min");
+        String director = documentMovie.select("div.filmInfo__info:nth-child(3)").text().replaceAll("więcej", "");
+        String screenwriter = "";
+        String genre = "";
+        String countryOfOrigin = "";
+        if (director.isEmpty()) {
+            director = documentMovie.select(".filmPosterSection__info > div:nth-child(2)").text().replaceAll("więcej", "");
+            screenwriter = documentMovie.select(".filmPosterSection__info > div:nth-child(4)").text().replaceAll("więcej", "");
+            genre = documentMovie.select("div.filmInfo__info:nth-child(6)").text();
+            countryOfOrigin = documentMovie.select("div.filmInfo__info:nth-child(8)").text();
+        } else {
+            screenwriter = documentMovie.select("div.filmInfo__info:nth-child(5)").text().replaceAll("więcej", "");
+            genre = documentMovie.select("div.filmInfo__info:nth-child(7)").text();
+            countryOfOrigin = documentMovie.select("div.filmInfo__info:nth-child(9)").text();
+        }
+        return new Movie(title,year,originalTitle,rate,criticsRate,length,director,screenwriter,genre,countryOfOrigin);
     }
 
     public void exportToExcel(List<Movie> list, boolean newExcelFormat) throws IOException{
