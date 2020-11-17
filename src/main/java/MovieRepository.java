@@ -84,13 +84,7 @@ public class MovieRepository {
     public void exportToExcel(List<Movie> list, boolean IsNewExcelFormat) throws IOException{
         Workbook workbook = getWorkbookObject(IsNewExcelFormat);
         Sheet sheet = workbook.createSheet("Toplist");
-
-        Row rowHeader = sheet.createRow(0);
-        rowHeader.setHeightInPoints(30);
-        String[] headers = getHeaders();
-        for (int i=0; i<11; i++) {
-            rowHeader.createCell(i).setCellValue(headers[i]);
-        }
+        setHeader(sheet);
 
         int rank = 1;
         for (Movie movie : list) {
@@ -145,6 +139,15 @@ public class MovieRepository {
         workbook.write(fileOut);
         fileOut.close();
         workbook.close();
+    }
+
+    private void setHeader(Sheet sheet) {
+        Row rowHeader = sheet.createRow(0);
+        rowHeader.setHeightInPoints(30);
+        String[] headers = getHeaders();
+        for (int i=0; i<11; i++) {
+            rowHeader.createCell(i).setCellValue(headers[i]);
+        }
     }
 
     private Workbook getWorkbookObject(boolean IsNewExcelFormat) {
