@@ -1,6 +1,7 @@
 import java.io.IOException;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
@@ -61,9 +62,9 @@ public class Main {
         }
 
         System.out.println("Downloading the data from Filmweb.pl...");
-        List<Movie> movieArray = movieRepository.getTopList(moviesToGet);
+        Map<Integer,Movie> movieMap = movieRepository.getTopList(moviesToGet);
         System.out.println("Exporting the data to excel format...");
-        movieRepository.exportToExcel(movieArray, newExcelFormat);
+        movieRepository.exportToExcel(movieMap, newExcelFormat);
         System.out.println("Done!");
         System.out.println("Press enter to quit.");
         scanner.nextLine();

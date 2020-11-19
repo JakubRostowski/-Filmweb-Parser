@@ -13,13 +13,12 @@ import org.jsoup.select.Elements;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class MovieRepository {
     private final String URL = "https://www.filmweb.pl";
 
-    public List<Movie> getTopList(int moviesCount) throws IOException{
+    public Map<Integer,Movie> getTopList(int moviesCount) throws IOException{
         if (moviesCount > 500 || moviesCount <=0) {
             System.out.println("Invalid input");
             return null;
@@ -29,18 +28,21 @@ public class MovieRepository {
                 maxPage++;
             }
             maxPage = (int) maxPage;
-            List<Movie> listOfMovies = new ArrayList<>();
+            Map<Integer,Movie> listOfMovies = new HashMap<Integer,Movie>();
 
             for (int i=1; i<=maxPage; i++) {
                 Connection connectList = Jsoup.connect(URL + "/ajax/ranking/film/" + i);
                 Document documentList = connectList.get();
-                Elements urls = documentList.select("div:nth-child(3) > div:nth-child(1) > h2:nth-child(1) > a:nth-child(1)");
+                Elements ranks = documentList.select("span.rankingType__position");
 
+                Elements urls = documentList.select("div:nth-child(3) > div:nth-child(1) > h2:nth-child(1) > a:nth-child(1)");
                 urls = deleteRedundantMovies(urls, moviesCount);
+                Elements finalUrls = urls;
 
                 urls.parallelStream().forEach((href) -> {
                     try {
-                        listOfMovies.add(getMovieData(href));
+                        int rankOfMovie = Integer.parseInt(ranks.get(finalUrls.indexOf(href)).text());
+                        listOfMovies.put(rankOfMovie,getMovieData(href));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -54,6 +56,7 @@ public class MovieRepository {
         Connection connectMovie = Jsoup.connect(URL + href.attr("href"));
         Document documentMovie = connectMovie.get();
 
+//        int rank = Integer.parseInt(documentMovie.select(".worldRanking").text().replaceAll("\\D+",""));
         String title = documentMovie.select(".filmCoverSection__title > span:nth-child(1)").text();
         int year = Integer.parseInt(documentMovie.select(".filmCoverSection__year").text());
         String originalTitle = documentMovie.select(".filmCoverSection__orginalTitle").text();
@@ -82,20 +85,19 @@ public class MovieRepository {
         return new Movie(title,year,originalTitle,rate,criticsRate,length,director,screenwriter,genre,countryOfOrigin);
     }
 
-    public void exportToExcel(List<Movie> list, boolean IsNewExcelFormat) throws IOException{
+    public void exportToExcel(Map<Integer,Movie> map, boolean IsNewExcelFormat) throws IOException{
         Workbook workbook = createWorkbookObject(IsNewExcelFormat);
         Sheet sheet = workbook.createSheet("Toplist");
         setHeader(sheet);
 
-        int rank = 1;
-        for (Movie movie : list) {
+        map.forEach((rank,movie) -> {
             Row row = sheet.createRow(rank);
 
-            for (int i=0; i<11; i++) {
+            for (int i=0; i<=10; i++) {
                 Cell cell = row.createCell(i);
-                switch(i) {
+                switch (i) {
                     case 0:
-                        cell.setCellValue(rank + ".");
+                        cell.setCellValue(rank.toString() + ".");
                         break;
                     case 1:
                         cell.setCellValue(movie.getTitle());
@@ -129,8 +131,7 @@ public class MovieRepository {
                         break;
                 }
             }
-            rank++;
-        }
+        });
 
         autoSizeColumns(sheet);
 
