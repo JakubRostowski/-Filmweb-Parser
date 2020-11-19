@@ -14,6 +14,8 @@ import org.jsoup.select.Elements;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class MovieRepository {
     private final String URL = "https://www.filmweb.pl";
@@ -28,7 +30,7 @@ public class MovieRepository {
                 maxPage++;
             }
             maxPage = (int) maxPage;
-            Map<Integer,Movie> listOfMovies = new HashMap<>();
+            Map<Integer,Movie> listOfMovies = new ConcurrentHashMap<>();
 
             for (int i=1; i<=maxPage; i++) {
                 Connection connectList = Jsoup.connect(URL + "/ajax/ranking/film/" + i);
