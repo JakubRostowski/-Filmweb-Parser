@@ -28,7 +28,7 @@ public class MovieRepository {
                 maxPage++;
             }
             maxPage = (int) maxPage;
-            Map<Integer,Movie> listOfMovies = new HashMap<Integer,Movie>();
+            Map<Integer,Movie> listOfMovies = new HashMap<>();
 
             for (int i=1; i<=maxPage; i++) {
                 Connection connectList = Jsoup.connect(URL + "/ajax/ranking/film/" + i);
