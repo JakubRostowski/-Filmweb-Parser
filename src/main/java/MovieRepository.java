@@ -19,34 +19,43 @@ import java.util.List;
 public class MovieRepository {
     private final String URL = "https://www.filmweb.pl";
 
-    public List<Movie> getTopList(int number) throws IOException{
-        if (number > 500 || number <=0) {
+    public List<Movie> getTopList(int moviesCount) throws IOException{
+        if (moviesCount > 500 || moviesCount <=0) {
             System.out.println("Invalid input");
             return null;
         } else {
-            double maxPage = (double) number / 25;
-            if (number % maxPage != 0) {
+            double maxPage = (double) moviesCount / 25;
+            if (moviesCount % maxPage != 0) {
                 maxPage++;
             }
             maxPage = (int) maxPage;
-            int moviesLeft = number;
             List<Movie> listOfMovies = new ArrayList<>();
 
             for (int i=1; i<=maxPage; i++) {
                 Connection connectList = Jsoup.connect(URL + "/ajax/ranking/film/" + i);
                 Document documentList = connectList.get();
                 Elements urls = documentList.select("div:nth-child(3) > div:nth-child(1) > h2:nth-child(1) > a:nth-child(1)");
-                for (Element href : urls) {
-                    listOfMovies.add(getMovieData(href));
 
-                    moviesLeft--;
-                    if(moviesLeft == 0) {
-                        return listOfMovies;
+                urls = deleteRedundantMovies(urls, moviesCount);
+
+//                for (Element href : urls) {
+//                    listOfMovies.add(getMovieData(href));
+//
+//                    moviesLeft--;
+//                    if(moviesLeft == 0) {
+//                        return listOfMovies;
+//                    }
+//                }
+                urls.parallelStream().forEach((href) -> {
+                    try {
+                        listOfMovies.add(getMovieData(href));
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                }
+                });
             }
+            return listOfMovies;
         }
-        return null;
     }
 
     private Movie getMovieData(Element href) throws IOException {
@@ -137,6 +146,19 @@ public class MovieRepository {
         workbook.write(fileOut);
         fileOut.close();
         workbook.close();
+    }
+
+    private Elements deleteRedundantMovies(Elements rawList, int moviesToKeep) {
+        Elements readyList = new Elements();
+
+        for (Element url : rawList) {
+            readyList.add(url);
+            moviesToKeep--;
+            if (moviesToKeep == 0) {
+                break;
+            }
+        }
+        return readyList;
     }
 
     private void autoSizeColumns(Sheet sheet) {
