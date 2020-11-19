@@ -38,14 +38,6 @@ public class MovieRepository {
 
                 urls = deleteRedundantMovies(urls, moviesCount);
 
-//                for (Element href : urls) {
-//                    listOfMovies.add(getMovieData(href));
-//
-//                    moviesLeft--;
-//                    if(moviesLeft == 0) {
-//                        return listOfMovies;
-//                    }
-//                }
                 urls.parallelStream().forEach((href) -> {
                     try {
                         listOfMovies.add(getMovieData(href));
