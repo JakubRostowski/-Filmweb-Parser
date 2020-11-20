@@ -30,27 +30,28 @@ public class MovieRepository {
             }
             maxPage = (int) maxPage;
             Map<Integer,Movie> listOfMovies = new ConcurrentHashMap<>();
-
+            Elements newUrls = new Elements();
+            Elements newRanks = new Elements();
             for (int i=1; i<=maxPage; i++) {
                 Connection connectList = Jsoup.connect(URL + "/ajax/ranking/film/" + i);
                 Document documentList = connectList.get();
                 Elements ranks = documentList.select("span.rankingType__position");
-
                 Elements urls = documentList.select("div:nth-child(3) > div:nth-child(1) > h2:nth-child(1) > a:nth-child(1)");
-                if (i == maxPage && moviesCount % 25 != 0) {
-                    urls = deleteRedundantMovies(urls, moviesCount);
-                }
-                Elements finalUrls = urls;
-
-                urls.parallelStream().forEach((href) -> {
-                    try {
-                        int rankOfMovie = Integer.parseInt(ranks.get(finalUrls.indexOf(href)).text());
-                        listOfMovies.put(rankOfMovie,getMovieData(href));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                });
+                newUrls.addAll(urls);
+                newRanks.addAll(ranks);
             }
+            if (moviesCount % 25 != 0) {
+                newUrls = deleteRedundantMovies(newUrls, moviesCount);
+            }
+            Elements finalNewUrls = newUrls;
+            newUrls.parallelStream().forEach((href) -> {
+                int rankOfMovie = Integer.parseInt(newRanks.get(finalNewUrls.indexOf(href)).text());
+                try {
+                    listOfMovies.put(rankOfMovie,getMovieData(href));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
             return listOfMovies;
         }
     }
@@ -144,10 +145,8 @@ public class MovieRepository {
         workbook.close();
     }
 
-    private Elements deleteRedundantMovies(Elements rawList, int moviesCount) {
+    private Elements deleteRedundantMovies(Elements rawList, int moviesToKeep) {
         Elements readyList = new Elements();
-        int moviesToKeep = moviesCount % 25;
-
         for (Element url : rawList) {
             if (moviesToKeep == 0) {
                 break;
