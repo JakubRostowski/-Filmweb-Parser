@@ -37,7 +37,9 @@ public class MovieRepository {
                 Elements ranks = documentList.select("span.rankingType__position");
 
                 Elements urls = documentList.select("div:nth-child(3) > div:nth-child(1) > h2:nth-child(1) > a:nth-child(1)");
-                urls = deleteRedundantMovies(urls, moviesCount);
+                if (i == maxPage) {
+                    urls = deleteRedundantMovies(urls, moviesCount);
+                }
                 Elements finalUrls = urls;
 
                 urls.parallelStream().forEach((href) -> {
@@ -142,8 +144,12 @@ public class MovieRepository {
         workbook.close();
     }
 
-    private Elements deleteRedundantMovies(Elements rawList, int moviesToKeep) {
+    private Elements deleteRedundantMovies(Elements rawList, int moviesCount) {
         Elements readyList = new Elements();
+        int moviesToKeep = moviesCount % 25;
+        if (moviesToKeep < 25) {
+            moviesToKeep = moviesToKeep % 25;
+        }
 
         for (Element url : rawList) {
             readyList.add(url);
