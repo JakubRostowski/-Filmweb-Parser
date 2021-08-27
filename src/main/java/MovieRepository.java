@@ -194,10 +194,9 @@ public class MovieRepository {
     }
 
     private String[] getHeaders(){
-        String[] array = new String[] {
+        return new String[] {
                 "Rank", "Title", "Year", "Original title", "Rate", "Critics' rate",
                 "Length", "Director", "Screenwriter", "Genre", "Country of origin"
         };
-        return array;
     }
 }
