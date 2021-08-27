@@ -65,7 +65,6 @@ public class MovieRepository {
         Connection connectMovie = Jsoup.connect(URL + href.attr("href"));
         Document documentMovie = connectMovie.get();
 
-//        int rank = Integer.parseInt(documentMovie.select(".worldRanking").text().replaceAll("\\D+",""));
         String title = documentMovie.select(".filmCoverSection__title > span:nth-child(1)").text();
         int year = Integer.parseInt(documentMovie.select(".filmCoverSection__year").text());
         String originalTitle = documentMovie.select(".filmCoverSection__orginalTitle").text();
