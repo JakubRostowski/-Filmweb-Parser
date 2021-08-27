@@ -32,7 +32,7 @@ public class MovieRepository {
                 Connection connectList = Jsoup.connect(URL + "/ajax/ranking/film/" + i);
                 Document documentList = connectList.get();
                 Elements ranks = documentList.select("span.rankingType__position");
-                Elements urls = documentList.select("div:nth-child(3) > div:nth-child(1) > h2:nth-child(1) > a:nth-child(1)");
+                Elements urls = documentList.select("div.rankingType__card > div.rankingType__header > div > h2 > a");
                 newUrls.addAll(urls);
                 newRanks.addAll(ranks);
             }
