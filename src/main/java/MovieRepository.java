@@ -101,7 +101,7 @@ public class MovieRepository {
                 Cell cell = row.createCell(i);
                 switch (i) {
                     case 0:
-                        cell.setCellValue(rank.toString() + ".");
+                        cell.setCellValue(rank + ".");
                         break;
                     case 1:
                         cell.setCellValue(movie.getTitle());
