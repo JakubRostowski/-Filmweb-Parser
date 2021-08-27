@@ -24,11 +24,7 @@ public class MovieRepository {
             System.out.println("Invalid input");
             return null;
         } else {
-            double maxPage = (double) moviesCount / 25;
-            if (moviesCount % maxPage != 0) {
-                maxPage++;
-            }
-            maxPage = (int) maxPage;
+            double maxPage = setMaxPage(moviesCount);
             Map<Integer,Movie> listOfMovies = new ConcurrentHashMap<>();
             Elements newUrls = new Elements();
             Elements newRanks = new Elements();
@@ -54,6 +50,15 @@ public class MovieRepository {
             });
             return listOfMovies;
         }
+    }
+
+    private double setMaxPage(int moviesCount) {
+        double maxPage = (double) moviesCount / 25;
+        if (moviesCount % maxPage != 0) {
+            maxPage++;
+        }
+        maxPage = (int) maxPage;
+        return maxPage;
     }
 
     private Movie getMovieData(Element href) throws IOException {
@@ -189,19 +194,10 @@ public class MovieRepository {
     }
 
     private String[] getHeaders(){
-        String[] array;
-        array = new String [11];
-        array[0] = "Rank";
-        array[1] = "Title";
-        array[2] = "Year";
-        array[3] = "Original title";
-        array[4] = "Rate";
-        array[5] = "Critics' rate";
-        array[6] = "Length";
-        array[7] = "Director";
-        array[8] = "Screenwriter";
-        array[9] = "Genre";
-        array[10] = "Country of origin";
+        String[] array = new String[] {
+                "Rank", "Title", "Year", "Original title", "Rate", "Critics' rate",
+                "Length", "Director", "Screenwriter", "Genre", "Country of origin"
+        };
         return array;
     }
 }
