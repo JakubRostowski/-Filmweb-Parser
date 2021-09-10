@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MovieRepository {
     private final String URL = "https://www.filmweb.pl";
 
-    public Map<Integer,Movie> getTopList(int moviesCount) throws IOException{
+    public Map<Integer,Movie> getTopList(int moviesCount) throws IOException {
         if (moviesCount > 500 || moviesCount <=0) {
             System.out.println("Invalid input");
             return null;
@@ -93,7 +93,7 @@ public class MovieRepository {
         return new Movie(title,year,originalTitle,rate,criticsRate,length,director,screenwriter,genre,countryOfOrigin);
     }
 
-    public void exportToExcel(Map<Integer,Movie> map, boolean IsNewExcelFormat) throws IOException{
+    public void exportToExcel(Map<Integer,Movie> map, boolean IsNewExcelFormat) throws IOException {
         Workbook workbook = createWorkbookObject(IsNewExcelFormat);
         Sheet sheet = workbook.createSheet("Toplist");
         setHeaders(sheet);
@@ -186,7 +186,7 @@ public class MovieRepository {
             }
     }
 
-    private FileOutputStream getFileExtension(boolean IsNewExcelFormat) throws IOException{
+    private FileOutputStream getFileExtension(boolean IsNewExcelFormat) throws IOException {
         if (IsNewExcelFormat) {
             return new FileOutputStream("toplist.xlsx");
         } else {
@@ -194,7 +194,7 @@ public class MovieRepository {
         }
     }
 
-    private String[] getHeaders(){
+    private String[] getHeaders() {
         return new String[] {
                 "Rank", "Title", "Year", "Original title", "Rate", "Critics' rate",
                 "Length", "Director", "Screenwriter", "Genre", "Country of origin"
