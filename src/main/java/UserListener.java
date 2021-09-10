@@ -27,7 +27,7 @@ public class UserListener {
             if (scanner.hasNextInt()) {
                 moviesToGet = scanner.nextInt();
                 scanner.nextLine();
-                if (moviesToGet >= 1 || moviesToGet <= 500) {
+                if (moviesToGet >= 1 && moviesToGet <= 500) {
                     return moviesToGet;
                 } else {
                     System.out.println("Invalid input. Please type number from 1 to 500");
