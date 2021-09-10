@@ -35,10 +35,8 @@ public class MovieRepository {
                 newUrls.addAll(urls);
                 newRanks.addAll(ranks);
             }
-            if (moviesCount % 25 != 0) {
-                newUrls = deleteRedundantMovies(newUrls, moviesCount);
-            }
-            Elements finalNewUrls = newUrls;
+
+            Elements finalNewUrls = deleteRedundantMovies(newUrls, moviesCount);
 
             Map<Integer, Movie> listOfMovies = new ConcurrentHashMap<>();
             newUrls.parallelStream().forEach((href) -> {
@@ -153,15 +151,18 @@ public class MovieRepository {
     }
 
     private Elements deleteRedundantMovies(Elements rawList, int moviesToKeep) {
-        Elements readyList = new Elements();
-        for (Element url : rawList) {
-            if (moviesToKeep == 0) {
-                break;
+        if (moviesToKeep % 25 != 0) {
+            Elements readyList = new Elements();
+            for (Element url : rawList) {
+                if (moviesToKeep == 0) {
+                    break;
+                }
+                readyList.add(url);
+                moviesToKeep--;
             }
-            readyList.add(url);
-            moviesToKeep--;
+            return readyList;
         }
-        return readyList;
+        return rawList;
     }
 
     private void autoSizeColumns(Sheet sheet) {
