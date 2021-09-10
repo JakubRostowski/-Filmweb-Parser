@@ -25,22 +25,22 @@ public class MovieRepository {
             return null;
         } else {
             double maxPage = setMaxPage(moviesCount);
-            Elements newUrls = new Elements();
-            Elements newRanks = new Elements();
+            Elements urls = new Elements();
+            Elements ranks = new Elements();
             for (int i = 1; i <= maxPage; i++) {
                 Connection connectList = Jsoup.connect(URL + "/ajax/ranking/film/" + i);
                 Document documentList = connectList.get();
-                Elements ranks = documentList.select("span.rankingType__position");
-                Elements urls = documentList.select("div.rankingType__card > div.rankingType__header > div > h2 > a");
-                newUrls.addAll(urls);
-                newRanks.addAll(ranks);
+                Elements pageRanks = documentList.select("span.rankingType__position");
+                Elements pageUrls = documentList.select("div.rankingType__card > div.rankingType__header > div > h2 > a");
+                urls.addAll(pageUrls);
+                ranks.addAll(pageRanks);
             }
 
-            Elements finalNewUrls = deleteRedundantMovies(newUrls, moviesCount);
+            Elements finalUrls = deleteRedundantMovies(urls, moviesCount);
 
             Map<Integer, Movie> listOfMovies = new ConcurrentHashMap<>();
-            newUrls.parallelStream().forEach((href) -> {
-                int rankOfMovie = Integer.parseInt(newRanks.get(finalNewUrls.indexOf(href)).text());
+            urls.parallelStream().forEach((href) -> {
+                int rankOfMovie = Integer.parseInt(ranks.get(finalUrls.indexOf(href)).text());
                 try {
                     listOfMovies.put(rankOfMovie, getMovieData(href));
                 } catch (IOException e) {
