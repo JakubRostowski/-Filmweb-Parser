@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 public class UserListener {
 
-    private static Scanner scanner = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);
 
     public boolean isDefaultSettings() {
         System.out.println("Hello! This program takes the Filmweb TOP500 list and exports it to an excel file." +
