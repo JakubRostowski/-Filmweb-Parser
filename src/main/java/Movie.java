@@ -10,7 +10,8 @@ public class Movie {
     private final String genre;
     private final String countryOfOrigin;
 
-    public Movie(String title, int year, String originalTitle, double rate, double criticsRate, String length, String director, String screenwriter, String genre, String countryOfOrigin) {
+    public Movie(String title, int year, String originalTitle, double rate, double criticsRate,
+                 String length, String director, String screenwriter, String genre, String countryOfOrigin) {
         this.title = title;
         this.year = year;
         this.originalTitle = originalTitle;
