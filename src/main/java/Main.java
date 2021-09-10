@@ -21,7 +21,7 @@ public class Main {
         }
 
         System.out.println("Downloading the data from Filmweb.pl...");
-        Map<Integer,Movie> movieMap = movieRepository.getTopList(moviesToGet);
+        Map<Integer, Movie> movieMap = movieRepository.getTopList(moviesToGet);
         System.out.println("Exporting the data to excel format...");
         movieRepository.exportToExcel(movieMap, newExcelFormat);
         System.out.println("Done!");

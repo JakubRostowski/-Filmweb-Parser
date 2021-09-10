@@ -19,16 +19,16 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MovieRepository {
     private final String URL = "https://www.filmweb.pl";
 
-    public Map<Integer,Movie> getTopList(int moviesCount) throws IOException {
-        if (moviesCount > 500 || moviesCount <=0) {
+    public Map<Integer, Movie> getTopList(int moviesCount) throws IOException {
+        if (moviesCount > 500 || moviesCount <= 0) {
             System.out.println("Invalid input");
             return null;
         } else {
             double maxPage = setMaxPage(moviesCount);
-            Map<Integer,Movie> listOfMovies = new ConcurrentHashMap<>();
+            Map<Integer, Movie> listOfMovies = new ConcurrentHashMap<>();
             Elements newUrls = new Elements();
             Elements newRanks = new Elements();
-            for (int i=1; i<=maxPage; i++) {
+            for (int i = 1; i <= maxPage; i++) {
                 Connection connectList = Jsoup.connect(URL + "/ajax/ranking/film/" + i);
                 Document documentList = connectList.get();
                 Elements ranks = documentList.select("span.rankingType__position");
@@ -43,7 +43,7 @@ public class MovieRepository {
             newUrls.parallelStream().forEach((href) -> {
                 int rankOfMovie = Integer.parseInt(newRanks.get(finalNewUrls.indexOf(href)).text());
                 try {
-                    listOfMovies.put(rankOfMovie,getMovieData(href));
+                    listOfMovies.put(rankOfMovie, getMovieData(href));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -68,14 +68,14 @@ public class MovieRepository {
         String title = documentMovie.select(".filmCoverSection__title > span:nth-child(1)").text();
         int year = Integer.parseInt(documentMovie.select(".filmCoverSection__year").text());
         String originalTitle = documentMovie.select(".filmCoverSection__orginalTitle").text();
-        double rate = Double.parseDouble(documentMovie.select("span.filmRating__rateValue:nth-child(2)").text().replaceAll(",","."));
+        double rate = Double.parseDouble(documentMovie.select("span.filmRating__rateValue:nth-child(2)").text().replaceAll(",", "."));
         double criticsRate;
         if (documentMovie.select("span.filmRating__rateValue:nth-child(1)").text().contains(",")) {
             criticsRate = Double.parseDouble(documentMovie.select("span.filmRating__rateValue:nth-child(1)").text().replaceAll(",", "."));
         } else {
             criticsRate = -1;
         }
-        String length = documentMovie.select(".filmCoverSection__filmTime").text().replaceAll("godz.","h").replaceAll("min.","min");
+        String length = documentMovie.select(".filmCoverSection__filmTime").text().replaceAll("godz.", "h").replaceAll("min.", "min");
         String director = documentMovie.select("div.filmInfo__info:nth-child(3)").text().replaceAll("więcej", "");
         String screenwriter;
         String genre;
@@ -90,10 +90,10 @@ public class MovieRepository {
             genre = documentMovie.select("div.filmInfo__info:nth-child(7)").text();
             countryOfOrigin = documentMovie.select("div.filmInfo__info:nth-child(9)").text();
         }
-        return new Movie(title,year,originalTitle,rate,criticsRate,length,director,screenwriter,genre,countryOfOrigin);
+        return new Movie(title, year, originalTitle, rate, criticsRate, length, director, screenwriter, genre, countryOfOrigin);
     }
 
-    public void exportToExcel(Map<Integer,Movie> map, boolean IsNewExcelFormat) throws IOException {
+    public void exportToExcel(Map<Integer, Movie> map, boolean IsNewExcelFormat) throws IOException {
         Workbook workbook = createWorkbookObject(IsNewExcelFormat);
         Sheet sheet = workbook.createSheet("Toplist");
         setHeaders(sheet);
@@ -110,7 +110,7 @@ public class MovieRepository {
         map.forEach((rank, movie) -> {
             Row row = sheet.createRow(rank);
 
-            for (int i=0; i<=10; i++) {
+            for (int i = 0; i <= 10; i++) {
                 Cell cell = row.createCell(i);
                 switch (i) {
                     case 0:
@@ -164,7 +164,7 @@ public class MovieRepository {
     }
 
     private void autoSizeColumns(Sheet sheet) {
-        for(int i = 0; i < getHeaders().length; i++) {
+        for (int i = 0; i < getHeaders().length; i++) {
             sheet.autoSizeColumn(i);
         }
     }
@@ -173,17 +173,17 @@ public class MovieRepository {
         Row rowHeader = sheet.createRow(0);
         rowHeader.setHeightInPoints(30);
         String[] headers = getHeaders();
-        for (int i=0; i<11; i++) {
+        for (int i = 0; i < 11; i++) {
             rowHeader.createCell(i).setCellValue(headers[i]);
         }
     }
 
     private Workbook createWorkbookObject(boolean IsNewExcelFormat) {
-            if (IsNewExcelFormat) {
-                return new XSSFWorkbook();
-            } else {
-                return new HSSFWorkbook();
-            }
+        if (IsNewExcelFormat) {
+            return new XSSFWorkbook();
+        } else {
+            return new HSSFWorkbook();
+        }
     }
 
     private FileOutputStream getFileExtension(boolean IsNewExcelFormat) throws IOException {
@@ -195,7 +195,7 @@ public class MovieRepository {
     }
 
     private String[] getHeaders() {
-        return new String[] {
+        return new String[]{
                 "Rank", "Title", "Year", "Original title", "Rate", "Critics' rate",
                 "Length", "Director", "Screenwriter", "Genre", "Country of origin"
         };

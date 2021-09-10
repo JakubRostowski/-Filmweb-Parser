@@ -8,7 +8,7 @@ public class UserListener {
         System.out.println("Hello! This program takes the Filmweb TOP500 list and exports it to an excel file." +
                 "\nWould like to use the default settings? Please type \"yes\" or \"no\".");
 
-        while(true) {
+        while (true) {
             String answer = scanner.nextLine().toLowerCase();
             if (answer.equals("yes")) {
                 return true;
@@ -23,7 +23,7 @@ public class UserListener {
     public int askAboutNumberOfMovies() {
         System.out.println("How many movies would you like to get from the toplist?");
         int moviesToGet;
-        while(true) {
+        while (true) {
             if (scanner.hasNextInt()) {
                 moviesToGet = scanner.nextInt();
                 scanner.nextLine();
@@ -41,7 +41,7 @@ public class UserListener {
                 "\n\t.xls - Old format. Best for compatibility." +
                 "\n\t.xlsx - New format. May be not supported by external or old viewers.");
 
-        while(true) {
+        while (true) {
             String answer = scanner.nextLine().toLowerCase();
             if (answer.equals(".xlsx") || answer.equals("xlsx")) {
                 return true;
