@@ -96,9 +96,18 @@ public class MovieRepository {
     public void exportToExcel(Map<Integer,Movie> map, boolean IsNewExcelFormat) throws IOException{
         Workbook workbook = createWorkbookObject(IsNewExcelFormat);
         Sheet sheet = workbook.createSheet("Toplist");
-        setHeader(sheet);
+        setHeaders(sheet);
+        writeRows(map, sheet);
+        autoSizeColumns(sheet);
 
-        map.forEach((rank,movie) -> {
+        FileOutputStream fileOut = getFileExtension(IsNewExcelFormat);
+        workbook.write(fileOut);
+        fileOut.close();
+        workbook.close();
+    }
+
+    private void writeRows(Map<Integer, Movie> map, Sheet sheet) {
+        map.forEach((rank, movie) -> {
             Row row = sheet.createRow(rank);
 
             for (int i=0; i<=10; i++) {
@@ -140,13 +149,6 @@ public class MovieRepository {
                 }
             }
         });
-
-        autoSizeColumns(sheet);
-
-        FileOutputStream fileOut = getFileExtension(IsNewExcelFormat);
-        workbook.write(fileOut);
-        fileOut.close();
-        workbook.close();
     }
 
     private Elements deleteRedundantMovies(Elements rawList, int moviesToKeep) {
@@ -167,7 +169,7 @@ public class MovieRepository {
         }
     }
 
-    private void setHeader(Sheet sheet) {
+    private void setHeaders(Sheet sheet) {
         Row rowHeader = sheet.createRow(0);
         rowHeader.setHeightInPoints(30);
         String[] headers = getHeaders();
