@@ -25,7 +25,6 @@ public class MovieRepository {
             return null;
         } else {
             double maxPage = setMaxPage(moviesCount);
-            Map<Integer, Movie> listOfMovies = new ConcurrentHashMap<>();
             Elements newUrls = new Elements();
             Elements newRanks = new Elements();
             for (int i = 1; i <= maxPage; i++) {
@@ -40,6 +39,8 @@ public class MovieRepository {
                 newUrls = deleteRedundantMovies(newUrls, moviesCount);
             }
             Elements finalNewUrls = newUrls;
+
+            Map<Integer, Movie> listOfMovies = new ConcurrentHashMap<>();
             newUrls.parallelStream().forEach((href) -> {
                 int rankOfMovie = Integer.parseInt(newRanks.get(finalNewUrls.indexOf(href)).text());
                 try {
