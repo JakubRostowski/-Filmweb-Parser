@@ -46,7 +46,7 @@ public class MovieRepository {
             Elements finalUrls = deleteRedundantMovies(urls, moviesCount);
 
             Map<Integer, Movie> listOfMovies = new ConcurrentHashMap<>();
-            urls.parallelStream().forEach((href) -> {
+            finalUrls.parallelStream().forEach((href) -> {
                 int rankOfMovie = Integer.parseInt(ranks.get(finalUrls.indexOf(href)).text());
                 try {
                     listOfMovies.put(rankOfMovie, getMovieData(href));
