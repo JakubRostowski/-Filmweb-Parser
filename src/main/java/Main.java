@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.util.Map;
 
 public class Main {
-    private static MovieRepository movieRepository = new MovieRepository();
+    private static final MovieRepository movieRepository = new MovieRepository();
 
     public static void main(String[] args) throws IOException {
 
@@ -22,6 +22,8 @@ public class Main {
 
         System.out.println("Downloading the data from Filmweb.pl...");
         Map<Integer, Movie> movieMap = movieRepository.getTopList(moviesToGet);
+        System.out.println("Exporting the data to database...");
+        movieRepository.addToDatabase(movieMap);
         System.out.println("Exporting the data to excel format...");
         movieRepository.exportToExcel(movieMap, newExcelFormat);
         System.out.println("Done!");
