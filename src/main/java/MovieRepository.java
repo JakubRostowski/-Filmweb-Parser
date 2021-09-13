@@ -11,12 +11,19 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MovieRepository {
+    private static final EntityManagerFactory factory =
+            Persistence.createEntityManagerFactory("thePersistenceUnit");
+    private static final EntityManager em = factory.createEntityManager();
     private final String URL = "https://www.filmweb.pl";
 
     public Map<Integer, Movie> getTopList(int moviesCount) throws IOException {
@@ -90,6 +97,15 @@ public class MovieRepository {
             countryOfOrigin = documentMovie.select("div.filmInfo__info:nth-child(9)").text();
         }
         return new Movie(title, year, originalTitle, rate, criticsRate, length, director, screenwriter, genre, countryOfOrigin);
+    }
+
+    public void addToDatabase(Map<Integer, Movie> movies) {
+        for (Map.Entry<Integer, Movie> movie : movies.entrySet()) {
+            EntityTransaction transaction = em.getTransaction();
+            transaction.begin();
+            em.persist(movie.getValue());
+            transaction.commit();
+        }
     }
 
     public void exportToExcel(Map<Integer, Movie> map, boolean IsNewExcelFormat) throws IOException {
