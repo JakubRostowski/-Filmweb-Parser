@@ -1,4 +1,12 @@
+import javax.persistence.*;
+
+@Entity
 public class Movie {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
+    private Long id;
+
     private final String title;
     private final int year;
     private final String originalTitle;
@@ -62,6 +70,14 @@ public class Movie {
 
     public String getCountryOfOrigin() {
         return countryOfOrigin;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override
