@@ -9,19 +9,19 @@ public class Main {
 
         UserListener userListener = new UserListener();
 
-        int moviesToGet;
         boolean newExcelFormat;
 
         if (userListener.isDefaultSettings()) {
-            moviesToGet = 500;
             newExcelFormat = true;
         } else {
-            moviesToGet = userListener.askAboutNumberOfMovies();
             newExcelFormat = userListener.askAboutExcelFormat();
         }
 
         System.out.println("Downloading the data from Filmweb.pl...");
-        Map<Integer, Movie> movieMap = movieRepository.getTopList(moviesToGet);
+        Map<Integer, Movie> movieMap = movieRepository.getTopList();
+        System.out.println("Looking for differences...");
+        // check what to add and what to update
+
         System.out.println("Exporting the data to database...");
         movieRepository.addToDatabase(movieMap);
         System.out.println("Exporting the data to excel format...");

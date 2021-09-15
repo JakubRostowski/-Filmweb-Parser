@@ -26,45 +26,42 @@ public class MovieRepository {
     private static final EntityManager em = factory.createEntityManager();
     private final String URL = "https://www.filmweb.pl";
 
-    public Map<Integer, Movie> getTopList(int moviesCount) throws IOException {
-        if (moviesCount > 500 || moviesCount <= 0) {
-            System.out.println("Invalid input");
-            return null;
-        } else {
-            double maxPage = setMaxPage(moviesCount);
-            Elements urls = new Elements();
-            Elements ranks = new Elements();
-            for (int i = 1; i <= maxPage; i++) {
-                Connection connectList = Jsoup.connect(URL + "/ajax/ranking/film/" + i);
-                Document documentList = connectList.get();
-                Elements pageRanks = documentList.select("span.rankingType__position");
-                Elements pageUrls = documentList.select("div.rankingType__card > div.rankingType__header > div > h2 > a");
-                urls.addAll(pageUrls);
-                ranks.addAll(pageRanks);
+    public Map<Integer, Movie> getTopList() throws IOException {
+        Elements urls = getUrls();
+        Elements ranks = getRanks();
+
+        Map<Integer, Movie> listOfMovies = new ConcurrentHashMap<>();
+        urls.parallelStream().forEach((href) -> {
+            int rankOfMovie = Integer.parseInt(ranks.get(urls.indexOf(href)).text());
+            try {
+                listOfMovies.put(rankOfMovie, getMovieData(href));
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-
-            Elements finalUrls = deleteRedundantMovies(urls, moviesCount);
-
-            Map<Integer, Movie> listOfMovies = new ConcurrentHashMap<>();
-            finalUrls.parallelStream().forEach((href) -> {
-                int rankOfMovie = Integer.parseInt(ranks.get(finalUrls.indexOf(href)).text());
-                try {
-                    listOfMovies.put(rankOfMovie, getMovieData(href));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-            return listOfMovies;
-        }
+        });
+        return listOfMovies;
     }
 
-    private double setMaxPage(int moviesCount) {
-        double maxPage = (double) moviesCount / 25;
-        if (moviesCount % maxPage != 0) {
-            maxPage++;
+    private Elements getRanks() throws IOException {
+        Elements ranks = new Elements();
+        for (int i = 1; i <= 20; i++) {
+            Connection connectList = Jsoup.connect(URL + "/ajax/ranking/film/" + i);
+            Document documentList = connectList.get();
+            Elements pageRanks = documentList.select("span.rankingType__position");
+            ranks.addAll(pageRanks);
         }
-        maxPage = (int) maxPage;
-        return maxPage;
+        return ranks;
+    }
+
+    private Elements getUrls() throws IOException {
+        Elements urls = new Elements();
+        for (int i = 1; i <= 20; i++) {
+            Connection connectList = Jsoup.connect(URL + "/ajax/ranking/film/" + i);
+            Document documentList = connectList.get();
+            Elements pageUrls = documentList.select("div.rankingType__card > div.rankingType__header > div > h2 > a");
+            urls.addAll(pageUrls);
+        }
+        return urls;
     }
 
     private Movie getMovieData(Element href) throws IOException {
@@ -164,21 +161,6 @@ public class MovieRepository {
                 }
             }
         });
-    }
-
-    private Elements deleteRedundantMovies(Elements rawList, int moviesToKeep) {
-        if (moviesToKeep % 25 != 0) {
-            Elements readyList = new Elements();
-            for (Element url : rawList) {
-                if (moviesToKeep == 0) {
-                    break;
-                }
-                readyList.add(url);
-                moviesToKeep--;
-            }
-            return readyList;
-        }
-        return rawList;
     }
 
     private void autoSizeColumns(Sheet sheet) {

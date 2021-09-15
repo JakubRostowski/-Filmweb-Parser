@@ -20,22 +20,6 @@ public class UserListener {
         }
     }
 
-    public int askAboutNumberOfMovies() {
-        System.out.println("How many movies would you like to get from the toplist?");
-        int moviesToGet;
-        while (true) {
-            if (scanner.hasNextInt()) {
-                moviesToGet = scanner.nextInt();
-                scanner.nextLine();
-                if (moviesToGet >= 1 && moviesToGet <= 500) {
-                    return moviesToGet;
-                } else {
-                    System.out.println("Invalid input. Please type number from 1 to 500");
-                }
-            }
-        }
-    }
-
     public boolean askAboutExcelFormat() {
         System.out.println("Please choose excel format:" +
                 "\n\t.xls - Old format. Best for compatibility." +
