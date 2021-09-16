@@ -1,12 +1,15 @@
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Entity
+@Table(name = "movies")
 public class Movie {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
+    private final int position;
     private final String title;
     private final int year;
     private final String originalTitle;
@@ -17,9 +20,12 @@ public class Movie {
     private final String screenwriter;
     private final String genre;
     private final String countryOfOrigin;
+    private final Timestamp timeOfCreation;
+    private Timestamp timeOfModification;
 
-    public Movie(String title, int year, String originalTitle, double rate, double criticsRate,
+    public Movie(int rank, String title, int year, String originalTitle, double rate, double criticsRate,
                  String length, String director, String screenwriter, String genre, String countryOfOrigin) {
+        this.position = rank;
         this.title = title;
         this.year = year;
         this.originalTitle = originalTitle;
@@ -30,6 +36,12 @@ public class Movie {
         this.screenwriter = screenwriter;
         this.genre = genre;
         this.countryOfOrigin = countryOfOrigin;
+        this.timeOfCreation = new Timestamp(System.currentTimeMillis());
+        this.timeOfModification = new Timestamp(System.currentTimeMillis());
+    }
+
+    public int getPosition() {
+        return position;
     }
 
     public String getTitle() {
@@ -70,6 +82,18 @@ public class Movie {
 
     public String getCountryOfOrigin() {
         return countryOfOrigin;
+    }
+
+    public Timestamp getTimeOfCreation() {
+        return timeOfCreation;
+    }
+
+    public Timestamp getTimeOfModification() {
+        return timeOfModification;
+    }
+
+    public void setTimeOfModification(Timestamp timeOfModification) {
+        this.timeOfModification = timeOfModification;
     }
 
     @Override

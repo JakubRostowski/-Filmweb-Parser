@@ -34,7 +34,7 @@ public class MovieRepository {
         urls.parallelStream().forEach((href) -> {
             int rankOfMovie = Integer.parseInt(ranks.get(urls.indexOf(href)).text());
             try {
-                listOfMovies.put(rankOfMovie, getMovieData(href));
+                listOfMovies.put(rankOfMovie, getMovieData(rankOfMovie, href));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -64,7 +64,7 @@ public class MovieRepository {
         return urls;
     }
 
-    private Movie getMovieData(Element href) throws IOException {
+    private Movie getMovieData(int rank, Element href) throws IOException {
         Connection connectMovie = Jsoup.connect(URL + href.attr("href"));
         Document documentMovie = connectMovie.get();
 
@@ -93,7 +93,7 @@ public class MovieRepository {
             genre = documentMovie.select("div.filmInfo__info:nth-child(7)").text();
             countryOfOrigin = documentMovie.select("div.filmInfo__info:nth-child(9)").text();
         }
-        return new Movie(title, year, originalTitle, rate, criticsRate, length, director, screenwriter, genre, countryOfOrigin);
+        return new Movie(rank, title, year, originalTitle, rate, criticsRate, length, director, screenwriter, genre, countryOfOrigin);
     }
 
     public void addToDatabase(Map<Integer, Movie> movies) {
