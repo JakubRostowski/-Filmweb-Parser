@@ -9,23 +9,23 @@ public class Movie {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    private final int position;
-    private final String title;
-    private final int year;
-    private final String originalTitle;
-    private final double rate;
-    private final double criticsRate;
-    private final String length;
-    private final String director;
-    private final String screenwriter;
-    private final String genre;
-    private final String countryOfOrigin;
-    private final Timestamp timeOfCreation;
+    private int position;
+    private String title;
+    private int year;
+    private String originalTitle;
+    private double rate;
+    private double criticsRate;
+    private String length;
+    private String director;
+    private String screenwriter;
+    private String genre;
+    private String countryOfOrigin;
+    private Timestamp timeOfCreation;
     private Timestamp timeOfModification;
 
-    public Movie(int rank, String title, int year, String originalTitle, double rate, double criticsRate,
+    public Movie(int position, String title, int year, String originalTitle, double rate, double criticsRate,
                  String length, String director, String screenwriter, String genre, String countryOfOrigin) {
-        this.position = rank;
+        this.position = position;
         this.title = title;
         this.year = year;
         this.originalTitle = originalTitle;
@@ -38,6 +38,14 @@ public class Movie {
         this.countryOfOrigin = countryOfOrigin;
         this.timeOfCreation = new Timestamp(System.currentTimeMillis());
         this.timeOfModification = new Timestamp(System.currentTimeMillis());
+    }
+
+    public Movie() {
+
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public int getPosition() {
@@ -99,16 +107,20 @@ public class Movie {
     @Override
     public String toString() {
         return "Movie{" +
-                "title='" + title + '\'' +
+                "id=" + id +
+                ", position=" + position +
+                ", title='" + title +
                 ", year=" + year +
-                ", originalTitle='" + originalTitle + '\'' +
+                ", originalTitle='" + originalTitle +
                 ", rate=" + rate +
                 ", criticsRate=" + criticsRate +
-                ", length='" + length + '\'' +
-                ", director='" + director + '\'' +
-                ", screenwriter='" + screenwriter + '\'' +
-                ", genre='" + genre + '\'' +
-                ", countryOfOrigin='" + countryOfOrigin + '\'' +
+                ", length='" + length +
+                ", director='" + director +
+                ", screenwriter='" + screenwriter +
+                ", genre='" + genre +
+                ", countryOfOrigin='" + countryOfOrigin +
+                ", timeOfCreation=" + timeOfCreation +
+                ", timeOfModification=" + timeOfModification +
                 '}';
     }
 }
