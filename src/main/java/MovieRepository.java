@@ -34,7 +34,7 @@ public class MovieRepository {
         Elements urls = getUrls();
         Elements ranks = getRanks();
 
-        Map<Integer, Movie> listOfMovies = new ConcurrentHashMap<>();
+        Map<Integer, Movie> listOfMovies = new TreeMap<>();
         urls.parallelStream().forEach((href) -> {
             int rankOfMovie = Integer.parseInt(ranks.get(urls.indexOf(href)).text());
             try {
