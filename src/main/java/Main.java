@@ -8,12 +8,13 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        boolean newExcelFormat;
+        boolean exportToExcel = false;
+        boolean newExcelFormat = true;
 
-        if (userListener.isDefaultSettings()) {
-            newExcelFormat = true;
-        } else {
-            newExcelFormat = userListener.askAboutExcelFormat();
+        if (!userListener.useDefaultSettings()) {
+            if (userListener.askAboutExcelOutput()) {
+                newExcelFormat = userListener.askAboutExcelFormat();
+            }
         }
 
         System.out.println("Downloading the data from Filmweb.pl...");
@@ -31,9 +32,10 @@ public class Main {
                 System.out.println(movie.getValue().getPosition() + ". " + movie.getValue().getTitle() + " changed.");
             }
         }
-
-        System.out.println("Exporting the data to excel format...");
-        movieRepository.exportToExcel(movieMap, newExcelFormat);
+        if (exportToExcel) {
+            System.out.println("Exporting the data to excel format...");
+            movieRepository.exportToExcel(movieMap, newExcelFormat);
+        }
         System.out.println("Done!");
         UserListener.closeProgram();
     }
