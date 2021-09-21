@@ -30,6 +30,7 @@ public class Main {
             System.out.println("Exporting the data to excel format...");
             movieRepository.exportToExcel(movieMap, newExcelFormat);
         }
+
         System.out.println("Done!");
     }
 }

@@ -109,6 +109,7 @@ public class MovieRepository {
             transaction.commit();
         }
     }
+
     public void verifyWithDatabase(Map<Integer, Movie> movieMap) {
         for (Map.Entry<Integer, Movie> movie : movieMap.entrySet()) {
             Movie checkedMovie = findById(movie.getKey());
