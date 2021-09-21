@@ -109,6 +109,18 @@ public class MovieRepository {
             transaction.commit();
         }
     }
+    public void verifyWithDatabase(Map<Integer, Movie> movieMap) {
+        for (Map.Entry<Integer, Movie> movie : movieMap.entrySet()) {
+            Movie checkedMovie = findById(movie.getKey());
+            if (movie.getValue().hashCode() == checkedMovie.hashCode()) {
+                updateTimeOfModification(checkedMovie);
+            } else {
+                System.out.println(movie.getValue().getPosition() + ". " + movie.getValue().getTitle() + " changed.");
+                // further actions
+
+            }
+        }
+    }
 
     public void updateTimeOfModification(Movie checkedMovie) {
         EntityTransaction transaction = em.getTransaction();

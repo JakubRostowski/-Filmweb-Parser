@@ -24,14 +24,8 @@ public class Main {
 //        movieRepository.createDatabase(movieMap);
 
         System.out.println("Looking for differences...");
-        for (Map.Entry<Integer, Movie> movie : movieMap.entrySet()) {
-            Movie checkedMovie = movieRepository.findById(movie.getKey());
-            if (movie.getValue().hashCode() == checkedMovie.hashCode()) {
-                movieRepository.updateTimeOfModification(checkedMovie);
-            } else {
-                System.out.println(movie.getValue().getPosition() + ". " + movie.getValue().getTitle() + " changed.");
-            }
-        }
+        movieRepository.verifyWithDatabase(movieMap);
+
         if (exportToExcel) {
             System.out.println("Exporting the data to excel format...");
             movieRepository.exportToExcel(movieMap, newExcelFormat);
