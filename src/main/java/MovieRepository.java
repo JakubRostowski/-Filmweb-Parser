@@ -17,6 +17,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -100,13 +101,20 @@ public class MovieRepository {
         return new Movie(rank, title, year, originalTitle, rate, criticsRate, length, director, screenwriter, genre, countryOfOrigin);
     }
 
-    public void addToDatabase(Map<Integer, Movie> movies) {
+    public void createDatabase(Map<Integer, Movie> movies) {
         for (Map.Entry<Integer, Movie> movie : movies.entrySet()) {
             EntityTransaction transaction = em.getTransaction();
             transaction.begin();
             em.persist(movie.getValue());
             transaction.commit();
         }
+    }
+
+    public void updateTimeOfModification(Movie checkedMovie) {
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
+        checkedMovie.setTimeOfModification(new Timestamp(System.currentTimeMillis()));
+        transaction.commit();
     }
 
     public void exportToExcel(Map<Integer, Movie> map, boolean IsNewExcelFormat) throws IOException {

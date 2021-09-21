@@ -1,8 +1,6 @@
 import java.io.IOException;
 
-import java.util.Collections;
 import java.util.Map;
-import java.util.Objects;
 
 public class Main {
     private static final MovieRepository movieRepository = new MovieRepository();
@@ -21,20 +19,18 @@ public class Main {
         System.out.println("Downloading the data from Filmweb.pl...");
         Map<Integer, Movie> movieMap = movieRepository.getTopList();
 
-//        System.out.println("Exporting the data to database...");
-//        movieRepository.addToDatabase(movieMap);
-
-        // check what to add and what to update
+//        System.out.println("Populating database if empty...");
+//        movieRepository.createDatabase(movieMap);
 
         System.out.println("Looking for differences...");
-        int changedRecords = 0;
         for (Map.Entry<Integer, Movie> movie : movieMap.entrySet()) {
-            if (!(movie.getValue().hashCode() == movieRepository.findById(movie.getKey()).hashCode())) {
+            Movie checkedMovie = movieRepository.findById(movie.getKey());
+            if (movie.getValue().hashCode() == checkedMovie.hashCode()) {
+                movieRepository.updateTimeOfModification(checkedMovie);
+            } else {
                 System.out.println(movie.getValue().getPosition() + ". " + movie.getValue().getTitle() + " changed.");
-                changedRecords++;
             }
         }
-        System.out.println("Movies changed: " + changedRecords);
 
         System.out.println("Exporting the data to excel format...");
         movieRepository.exportToExcel(movieMap, newExcelFormat);
