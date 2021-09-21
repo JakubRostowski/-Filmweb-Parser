@@ -13,6 +13,7 @@ public class Main {
 
         if (!userListener.useDefaultSettings()) {
             if (userListener.askAboutExcelOutput()) {
+                exportToExcel = true;
                 newExcelFormat = userListener.askAboutExcelFormat();
             }
         }
