@@ -50,12 +50,4 @@ public class UserListener {
             }
         }
     }
-
-    public static void closeProgram() {
-        System.out.println("Press enter to quit.");
-        scanner.nextLine();
-        System.exit(0);
-    }
-
-
 }

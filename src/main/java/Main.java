@@ -31,7 +31,5 @@ public class Main {
             movieRepository.exportToExcel(movieMap, newExcelFormat);
         }
         System.out.println("Done!");
-        UserListener.closeProgram();
     }
-
 }
