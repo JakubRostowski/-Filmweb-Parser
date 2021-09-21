@@ -5,7 +5,7 @@ public class UserListener {
     private static final Scanner scanner = new Scanner(System.in);
 
     public boolean useDefaultSettings() {
-        System.out.println("Hello! This program takes the Filmweb TOP500 list and exports it to an excel file." +
+        System.out.println("Hello! This program takes the Filmweb Top500 list and saves it in the database." +
                 "\nWould like to use the default settings? Please type \"yes\" or \"no\".");
 
         while (true) {
