@@ -26,6 +26,10 @@ public class MovieRepository {
     private static final EntityManager em = factory.createEntityManager();
     private final String URL = "https://www.filmweb.pl";
 
+    public Movie findById(long id) {
+        return em.find(Movie.class, id);
+    }
+
     public Map<Integer, Movie> getTopList() throws IOException {
         Elements urls = getUrls();
         Elements ranks = getRanks();
