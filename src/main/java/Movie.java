@@ -1,5 +1,6 @@
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Objects;
 
 @Entity
 @Table(name = "movies")
@@ -102,6 +103,19 @@ public class Movie {
 
     public void setTimeOfModification(Timestamp timeOfModification) {
         this.timeOfModification = timeOfModification;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Movie)) return false;
+        Movie movie = (Movie) o;
+        return getPosition() == movie.getPosition() && Double.compare(movie.getRate(), getRate()) == 0 && Double.compare(movie.getCriticsRate(), getCriticsRate()) == 0 && getTitle().equals(movie.getTitle());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getPosition(), getTitle(), getRate(), getCriticsRate());
     }
 
     @Override
