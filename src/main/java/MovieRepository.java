@@ -27,6 +27,10 @@ public class MovieRepository {
         return em.find(Movie.class, id);
     }
 
+    public static List getMoviesFromDatabase() {
+        return em.createQuery("from Movie").getResultList();
+    }
+
     public Map<Integer, Movie> getTopList() throws IOException {
         Elements urls = getUrls();
         Elements ranks = getRanks();
@@ -108,15 +112,13 @@ public class MovieRepository {
 
     public boolean checkIfEmpty() {
         Query query = em.createNativeQuery("SELECT COUNT(*) FROM movies");
-        if (query.getSingleResult().equals(0)) {
-            return true;
-        }
-        return false;
+        return query.getSingleResult().equals(0);
     }
 
     public void verifyWithDatabase(Map<Integer, Movie> movieMap) {
+        List<Movie> movies = getMoviesFromDatabase();
         for (Map.Entry<Integer, Movie> movie : movieMap.entrySet()) {
-            Movie checkedMovie = findById(movie.getKey());
+            Movie checkedMovie = movies.get(movie.getKey()-1);
             if (movie.getValue().hashCode() == checkedMovie.hashCode()) {
                 updateTimeOfModification(checkedMovie);
             } else {
