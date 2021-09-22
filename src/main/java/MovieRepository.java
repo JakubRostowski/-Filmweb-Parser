@@ -11,10 +11,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import javax.persistence.*;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -107,6 +104,14 @@ public class MovieRepository {
             em.persist(movie.getValue());
             transaction.commit();
         }
+    }
+
+    public boolean checkIfEmpty() {
+        Query query = em.createNativeQuery("SELECT COUNT(*) FROM movies");
+        if (query.getSingleResult().equals(0)) {
+            return true;
+        }
+        return false;
     }
 
     public void verifyWithDatabase(Map<Integer, Movie> movieMap) {

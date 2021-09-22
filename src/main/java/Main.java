@@ -21,8 +21,10 @@ public class Main {
         System.out.println("Downloading the data from Filmweb.pl...");
         Map<Integer, Movie> movieMap = movieRepository.getTopList();
 
-//        System.out.println("Populating database if empty...");
-//        movieRepository.createDatabase(movieMap);
+        if (movieRepository.checkIfEmpty()) {
+            System.out.println("Populating database if empty...");
+            movieRepository.createDatabase(movieMap);
+        }
 
         System.out.println("Looking for differences...");
         movieRepository.verifyWithDatabase(movieMap);
