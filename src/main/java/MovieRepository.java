@@ -27,7 +27,7 @@ public class MovieRepository {
         return em.find(Movie.class, id);
     }
 
-    public static List getMoviesFromDatabase() {
+    public static List<Movie> getMoviesFromDatabase() {
         return em.createQuery("from Movie").getResultList();
     }
 
