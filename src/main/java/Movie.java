@@ -3,7 +3,7 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
-@Table(name = "movies")
+@Table(name = "movie")
 public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,6 +43,10 @@ public class Movie {
 
     public Movie() {
 
+    }
+
+    public ArchivedMovie getArchivedMovie() {
+        return new ArchivedMovie(getPosition(), getTitle(), getRate(), getCriticsRate(), getTimeOfCreation());
     }
 
     public Long getId() {
