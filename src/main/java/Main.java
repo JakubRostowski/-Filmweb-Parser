@@ -1,9 +1,13 @@
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import java.io.IOException;
 
 import java.util.Map;
 
 public class Main {
-    private static final MovieRepository movieRepository = new MovieRepository();
+    private final MovieService movieService = new MovieService();
+
     private static final UserListener userListener = new UserListener();
 
     public static void main(String[] args) throws IOException {
@@ -18,20 +22,14 @@ public class Main {
             }
         }
 
-        System.out.println("Downloading the data from Filmweb.pl...");
-        Map<Integer, Movie> movieMap = movieRepository.getTopList();
-
-        if (movieRepository.checkIfEmpty()) {
-            System.out.println("Populating database if empty...");
-            movieRepository.createDatabase(movieMap);
+        Map<Integer, Movie> movieMap = MovieService.downloadData();
+        if (!MovieService.populateDatabaseIfEmpty(movieMap)) {
+            System.out.println("...so I am checking differences");
+            MovieService.checkDifferences(movieMap);
         }
 
-        System.out.println("Looking for differences...");
-        movieRepository.verifyWithDatabase(movieMap);
-
         if (exportToExcel) {
-            System.out.println("Exporting the data to excel format...");
-            movieRepository.exportToExcel(movieMap, newExcelFormat);
+            MovieService.ExportFile(movieMap, newExcelFormat);
         }
 
         System.out.println("Done!");

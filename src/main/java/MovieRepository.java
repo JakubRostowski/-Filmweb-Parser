@@ -18,10 +18,13 @@ import java.sql.Timestamp;
 import java.util.*;
 
 public class MovieRepository {
-    private static final EntityManagerFactory factory =
-            Persistence.createEntityManagerFactory("thePersistenceUnit");
-    private static final EntityManager em = factory.createEntityManager();
+
     private final String URL = "https://www.filmweb.pl";
+    private static EntityManager em;
+
+    public MovieRepository(EntityManager em) {
+        MovieRepository.em = em;
+    }
 
     public Movie findById(long id) {
         return em.find(Movie.class, id);
@@ -103,33 +106,32 @@ public class MovieRepository {
 
     public void createDatabase(Map<Integer, Movie> movies) {
         for (Map.Entry<Integer, Movie> movie : movies.entrySet()) {
-            EntityTransaction transaction = em.getTransaction();
-            transaction.begin();
-            em.persist(movie.getValue());
-            transaction.commit();
+            addMovie(movie.getValue());
         }
+    }
+
+    private void addMovie(Movie movie) {
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
+        em.persist(movie);
+        transaction.commit();
     }
 
     public boolean checkIfEmpty() {
-        Query query = em.createNativeQuery("SELECT COUNT(*) FROM movies");
-        return query.getSingleResult().equals(0);
+        Query query = em.createNativeQuery("SELECT COUNT(*) FROM movie");
+        String result = query.getResultList().get(0).toString();
+        return result.equals("0");
+
     }
 
-    public void verifyWithDatabase(Map<Integer, Movie> movieMap) {
-        List<Movie> movies = getMoviesFromDatabase();
-        for (Map.Entry<Integer, Movie> movie : movieMap.entrySet()) {
-            Movie checkedMovie = movies.get(movie.getKey()-1);
-            if (movie.getValue().hashCode() == checkedMovie.hashCode()) {
-                updateTimeOfModification(checkedMovie);
-            } else {
-                System.out.println(movie.getValue().getPosition() + ". " + movie.getValue().getTitle() + " changed.");
-                // further actions
-
-            }
-        }
+    public static void deleteMovie(Movie movie) {
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
+        em.remove(movie);
+        transaction.commit();
     }
 
-    public void updateTimeOfModification(Movie checkedMovie) {
+    public static void updateTimeOfModification(Movie checkedMovie) {
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();
         checkedMovie.setTimeOfModification(new Timestamp(System.currentTimeMillis()));
