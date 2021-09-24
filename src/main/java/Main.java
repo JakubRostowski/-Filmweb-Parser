@@ -4,7 +4,6 @@ import java.util.Map;
 
 public class Main {
     private static final MovieService movieService = new MovieService();
-
     private static final UserListener userListener = new UserListener();
 
     public static void main(String[] args) throws IOException {

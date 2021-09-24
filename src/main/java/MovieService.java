@@ -13,12 +13,12 @@ public class MovieService {
     private static final MovieRepository movieRepository = new MovieRepository(em);
     private static final ArchivedMovieRepository archivedMovieRepository = new ArchivedMovieRepository(em);
 
-    public static Map<Integer, Movie> downloadData() throws IOException {
+    public Map<Integer, Movie> downloadData() throws IOException {
         System.out.println("Downloading the data from Filmweb.pl...");
         return movieRepository.getTopList();
     }
 
-    public static boolean populateDatabaseIfEmpty(Map<Integer, Movie> movieMap) {
+    public boolean populateDatabaseIfEmpty(Map<Integer, Movie> movieMap) {
         if (movieRepository.checkIfEmpty()) {
             System.out.println("Populating empty database...");
             movieRepository.createDatabase(movieMap);
@@ -29,7 +29,7 @@ public class MovieService {
         }
     }
 
-    public static void checkDifferences(Map<Integer, Movie> movieMap) {
+    public void checkDifferences(Map<Integer, Movie> movieMap) {
         System.out.println("Looking for differences...");
 
         List<Movie> databaseMovies = MovieRepository.getMoviesFromDatabase();
@@ -45,7 +45,7 @@ public class MovieService {
         }
     }
 
-    public static void ExportFile(Map<Integer, Movie> movieMap, boolean newExcelFormat) throws IOException {
+    public void ExportFile(Map<Integer, Movie> movieMap, boolean newExcelFormat) throws IOException {
         System.out.println("Exporting the data to excel format...");
         movieRepository.exportToExcel(movieMap, newExcelFormat);
     }
