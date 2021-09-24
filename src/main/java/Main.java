@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Map;
 
 public class Main {
-    private final MovieService movieService = new MovieService();
+    private static final MovieService movieService = new MovieService();
 
     private static final UserListener userListener = new UserListener();
 
@@ -22,14 +22,14 @@ public class Main {
             }
         }
 
-        Map<Integer, Movie> movieMap = MovieService.downloadData();
-        if (!MovieService.populateDatabaseIfEmpty(movieMap)) {
+        Map<Integer, Movie> movieMap = movieService.downloadData();
+        if (!movieService.populateDatabaseIfEmpty(movieMap)) {
             System.out.println("...so I am checking differences");
-            MovieService.checkDifferences(movieMap);
+            movieService.checkDifferences(movieMap);
         }
 
         if (exportToExcel) {
-            MovieService.ExportFile(movieMap, newExcelFormat);
+            movieService.ExportFile(movieMap, newExcelFormat);
         }
 
         System.out.println("Done!");

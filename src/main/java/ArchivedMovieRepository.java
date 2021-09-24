@@ -9,7 +9,7 @@ public class ArchivedMovieRepository {
         this.em = em;
     }
 
-    public static void addArchivedMovie(ArchivedMovie movie) {
+    public void addArchivedMovie(ArchivedMovie movie) {
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();
         em.persist(movie);

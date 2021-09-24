@@ -11,7 +11,7 @@ public class MovieService {
     private static final EntityManager em = factory.createEntityManager();
 
     private static final MovieRepository movieRepository = new MovieRepository(em);
-    private static final ArchivedMovieRepository archievedMovieRepository = new ArchivedMovieRepository(em);
+    private static final ArchivedMovieRepository archivedMovieRepository = new ArchivedMovieRepository(em);
 
     public static Map<Integer, Movie> downloadData() throws IOException {
         System.out.println("Downloading the data from Filmweb.pl...");
@@ -41,7 +41,7 @@ public class MovieService {
             } else {
                 System.out.println(checkedMovie.getPosition() + ". " + checkedMovie.getTitle() + " changed.");
                 MovieRepository.deleteMovie(checkedMovie);
-                ArchivedMovieRepository.addArchivedMovie(checkedMovie.getArchivedMovie());
+                archivedMovieRepository.addArchivedMovie(checkedMovie.getArchivedMovie());
             }
         }
     }
