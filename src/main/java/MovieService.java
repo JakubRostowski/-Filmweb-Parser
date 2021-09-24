@@ -32,14 +32,14 @@ public class MovieService {
     public void checkDifferences(Map<Integer, Movie> movieMap) {
         System.out.println("Looking for differences...");
 
-        List<Movie> databaseMovies = MovieRepository.getMoviesFromDatabase();
+        List<Movie> databaseMovies = movieRepository.getMoviesFromDatabase();
         for (Map.Entry<Integer, Movie> movie : movieMap.entrySet()) {
             Movie checkedMovie = databaseMovies.get(movie.getValue().getPosition()-1);
             if (movie.getValue().hashCode() == checkedMovie.hashCode()) {
-                MovieRepository.updateTimeOfModification(checkedMovie);
+                movieRepository.updateTimeOfModification(checkedMovie);
             } else {
                 System.out.println(checkedMovie.getPosition() + ". " + checkedMovie.getTitle() + " changed.");
-                MovieRepository.deleteMovie(checkedMovie);
+                movieRepository.deleteMovie(checkedMovie);
                 archivedMovieRepository.addArchivedMovie(checkedMovie.getArchivedMovie());
             }
         }

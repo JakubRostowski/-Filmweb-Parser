@@ -30,7 +30,7 @@ public class MovieRepository {
         return em.find(Movie.class, id);
     }
 
-    public static List<Movie> getMoviesFromDatabase() {
+    public List<Movie> getMoviesFromDatabase() {
         return em.createQuery("from Movie").getResultList();
     }
 
@@ -124,14 +124,14 @@ public class MovieRepository {
 
     }
 
-    public static void deleteMovie(Movie movie) {
+    public void deleteMovie(Movie movie) {
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();
         em.remove(movie);
         transaction.commit();
     }
 
-    public static void updateTimeOfModification(Movie checkedMovie) {
+    public void updateTimeOfModification(Movie checkedMovie) {
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();
         checkedMovie.setTimeOfModification(new Timestamp(System.currentTimeMillis()));
