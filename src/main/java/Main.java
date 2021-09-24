@@ -21,7 +21,6 @@ public class Main {
 
         Map<Integer, Movie> movieMap = movieService.downloadData();
         if (!movieService.populateDatabaseIfEmpty(movieMap)) {
-            System.out.println("...so I am checking differences");
             movieService.checkDifferences(movieMap);
         }
 

@@ -21,7 +21,6 @@ public class MovieService {
     public static boolean populateDatabaseIfEmpty(Map<Integer, Movie> movieMap) {
         if (movieRepository.checkIfEmpty()) {
             System.out.println("Populating empty database...");
-            System.out.println("Database is empty, so I am adding movie Map to DB");
             movieRepository.createDatabase(movieMap);
             return true;
         } else {
