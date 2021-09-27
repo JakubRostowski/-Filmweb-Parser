@@ -18,7 +18,7 @@ public class MovieService {
         return movieRepository.getTopList();
     }
 
-    public boolean isEmpty() {
+    public boolean isDatabaseEmpty() {
         return movieRepository.checkIfEmpty();
     }
 
