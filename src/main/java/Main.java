@@ -19,7 +19,9 @@ public class Main {
         }
 
         Map<Integer, Movie> movieMap = movieService.downloadData();
-        if (!movieService.populateDatabaseIfEmpty(movieMap)) {
+        if (movieService.isEmpty()) {
+            movieService.populateDatabase(movieMap);
+        } else {
             movieService.checkDifferences(movieMap);
         }
 

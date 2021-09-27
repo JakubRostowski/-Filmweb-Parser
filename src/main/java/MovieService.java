@@ -18,15 +18,12 @@ public class MovieService {
         return movieRepository.getTopList();
     }
 
-    public boolean populateDatabaseIfEmpty(Map<Integer, Movie> movieMap) {
-        if (movieRepository.checkIfEmpty()) {
-            System.out.println("Populating empty database...");
-            movieRepository.createDatabase(movieMap);
-            return true;
-        } else {
-            System.out.println("Database is not empty...");
-            return false;
-        }
+    public boolean isEmpty() {
+        return movieRepository.checkIfEmpty();
+    }
+
+    public void populateDatabase(Map<Integer, Movie> movieMap) {
+        movieRepository.createDatabase(movieMap);
     }
 
     public void checkDifferences(Map<Integer, Movie> movieMap) {
