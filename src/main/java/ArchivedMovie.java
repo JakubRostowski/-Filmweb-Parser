@@ -7,7 +7,7 @@ public class ArchivedMovie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Long id;
+    private Long archivedMovieId;
 
     private int position;
     private String title;
@@ -32,7 +32,7 @@ public class ArchivedMovie {
     @Override
     public String toString() {
         return "Movie{" +
-                "id=" + id +
+                "id=" + archivedMovieId +
                 ", position=" + position +
                 ", title='" + title +
                 ", rate=" + rate +
