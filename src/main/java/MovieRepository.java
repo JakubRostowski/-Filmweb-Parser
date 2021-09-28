@@ -110,7 +110,7 @@ public class MovieRepository {
         }
     }
 
-    private void addMovie(Movie movie) {
+    public void addMovie(Movie movie) {
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();
         em.persist(movie);
