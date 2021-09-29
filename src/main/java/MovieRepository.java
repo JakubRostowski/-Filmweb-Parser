@@ -131,6 +131,16 @@ public class MovieRepository {
         transaction.commit();
     }
 
+    public void updateChangedMovie(Movie oldMovie, Movie newMovie) {
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
+        oldMovie.setPosition(newMovie.getPosition());
+        oldMovie.setRate(newMovie.getRate());
+        oldMovie.setCriticsRate(newMovie.getCriticsRate());
+        oldMovie.setTimeOfModification(new Timestamp(System.currentTimeMillis()));
+        transaction.commit();
+    }
+
     public void updateTimeOfModification(Movie checkedMovie) {
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();
