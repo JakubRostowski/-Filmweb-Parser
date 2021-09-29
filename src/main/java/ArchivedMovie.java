@@ -9,6 +9,10 @@ public class ArchivedMovie {
     @Column(name = "id", nullable = false)
     private Long archivedMovieId;
 
+    @ManyToOne
+    @JoinColumn(name="movieId")
+    private Movie movieId;
+
     private int position;
     private String title;
     private double rate;

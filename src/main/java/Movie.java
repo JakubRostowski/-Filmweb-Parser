@@ -1,5 +1,7 @@
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -23,6 +25,9 @@ public class Movie {
     private String countryOfOrigin;
     private Timestamp timeOfCreation;
     private Timestamp timeOfModification;
+
+    @OneToMany(mappedBy="movieId")
+    private List<ArchivedMovie> archivedMovies = new ArrayList<>();
 
     public Movie(int position, String title, int year, String originalTitle, double rate, double criticsRate,
                  String length, String director, String screenwriter, String genre, String countryOfOrigin) {
