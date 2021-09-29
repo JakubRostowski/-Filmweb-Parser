@@ -33,6 +33,10 @@ public class ArchivedMovie {
 
     }
 
+    public void setMovieId(Movie movieId) {
+        this.movieId = movieId;
+    }
+
     @Override
     public String toString() {
         return "Movie{" +
