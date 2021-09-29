@@ -62,6 +62,10 @@ public class Movie {
         return position;
     }
 
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -78,8 +82,16 @@ public class Movie {
         return rate;
     }
 
+    public void setRate(double rate) {
+        this.rate = rate;
+    }
+
     public double getCriticsRate() {
         return criticsRate;
+    }
+
+    public void setCriticsRate(double criticsRate) {
+        this.criticsRate = criticsRate;
     }
 
     public String getLength() {
