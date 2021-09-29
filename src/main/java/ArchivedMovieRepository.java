@@ -10,7 +10,7 @@ public class ArchivedMovieRepository {
     }
 
     public void addArchivedMovie(Movie movieData) {
-        ArchivedMovie movie = movieData.getArchivedMovie();
+        ArchivedMovie movie = movieData.getArchivedMovieObject();
         movie.setMovieId(movieData);
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();

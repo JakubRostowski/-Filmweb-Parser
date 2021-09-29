@@ -38,6 +38,7 @@ public class MovieService {
                 System.out.println(checkedMovie.getPosition() + ". " + checkedMovie.getTitle() + " changed.");
                 archivedMovieRepository.addArchivedMovie(checkedMovie);
                 movieRepository.updateChangedMovie(checkedMovie, movie.getValue());
+                checkedMovie.getArchivedMovies().add(movie.getValue().getArchivedMovieObject());
             }
         }
     }

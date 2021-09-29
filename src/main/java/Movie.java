@@ -26,6 +26,7 @@ public class Movie {
     private Timestamp timeOfCreation;
     private Timestamp timeOfModification;
 
+    //TODO: check bidirectional relation
     @OneToMany(mappedBy="movieId")
     private List<ArchivedMovie> archivedMovies = new ArrayList<>();
 
@@ -50,12 +51,16 @@ public class Movie {
 
     }
 
-    public ArchivedMovie getArchivedMovie() {
+    public ArchivedMovie getArchivedMovieObject() {
         return new ArchivedMovie(getPosition(), getTitle(), getRate(), getCriticsRate(), getTimeOfCreation());
     }
 
     public Long getMovieId() {
         return movieId;
+    }
+
+    public List<ArchivedMovie> getArchivedMovies() {
+        return archivedMovies;
     }
 
     public int getPosition() {
