@@ -1,3 +1,8 @@
+package repository;
+
+import entity.ArchivedMovie;
+import entity.Movie;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 

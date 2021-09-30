@@ -1,3 +1,5 @@
+package entity;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
@@ -39,7 +41,7 @@ public class ArchivedMovie {
 
     @Override
     public String toString() {
-        return "Movie{" +
+        return "entity.Movie{" +
                 "id=" + archivedMovieId +
                 ", position=" + position +
                 ", title='" + title +

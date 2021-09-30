@@ -1,3 +1,9 @@
+package service;
+
+import entity.Movie;
+import repository.ArchivedMovieRepository;
+import repository.MovieRepository;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -25,7 +31,7 @@ public class MovieService {
     public void populateDatabase(Map<Integer, Movie> movieMap) {
         movieRepository.createDatabase(movieMap);
     }
-
+    // TODO: dodawanie filmów spoza bazy danych i zmiana pozycji poprzednika na np. 0 albo null
     public void checkDifferences(Map<Integer, Movie> movieMap) {
         System.out.println("Looking for differences...");
 
