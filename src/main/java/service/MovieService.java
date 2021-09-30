@@ -31,7 +31,7 @@ public class MovieService {
     public void populateDatabase(Map<Integer, Movie> movieMap) {
         movieRepository.createDatabase(movieMap);
     }
-    // TODO: dodawanie filmów spoza bazy danych i zmiana pozycji poprzednika na np. 0 albo null
+    // TODO: adding movies into database and changing position value to 0/null
     public void checkDifferences(Map<Integer, Movie> movieMap) {
         System.out.println("Looking for differences...");
 
