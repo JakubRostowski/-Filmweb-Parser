@@ -144,6 +144,13 @@ public class MovieRepository {
         transaction.commit();
     }
 
+    public void updatePositionToUnused(Movie movie) {
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
+        movie.setPosition(-1);
+        transaction.commit();
+    }
+
     public void updateTimeOfModification(Movie checkedMovie) {
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();

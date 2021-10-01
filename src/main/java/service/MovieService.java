@@ -10,6 +10,7 @@ import javax.persistence.Persistence;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class MovieService {
     private static final EntityManagerFactory factory =
@@ -36,17 +37,29 @@ public class MovieService {
         System.out.println("Looking for differences...");
 
         List<Movie> databaseMovies = movieRepository.getMoviesFromDatabase();
+
         for (Map.Entry<Integer, Movie> movie : movieMap.entrySet()) {
-            Movie checkedMovie = databaseMovies.get(movie.getValue().getPosition()-1);
+            Movie checkedMovie = getUniqueMovieByPosition(databaseMovies, movie.getValue().getPosition()).get();
             if (movie.getValue().hashCode() == checkedMovie.hashCode()) {
                 movieRepository.updateTimeOfModification(checkedMovie);
             } else {
                 System.out.println(checkedMovie.getPosition() + ". " + checkedMovie.getTitle() + " changed.");
                 archivedMovieRepository.addArchivedMovie(checkedMovie);
-                movieRepository.updateChangedMovie(checkedMovie, movie.getValue());
-                checkedMovie.getArchivedMovies().add(movie.getValue().getArchivedMovieObject());
+                if (movie.getValue().getTitle().equals(checkedMovie.getTitle())) {
+                    movieRepository.updateChangedMovie(checkedMovie, movie.getValue());
+                    checkedMovie.getArchivedMovies().add(movie.getValue().getArchivedMovieObject());
+                } else {
+                    movieRepository.addMovie(movie.getValue());
+                    movieRepository.updatePositionToUnused(checkedMovie);
+                }
             }
         }
+    }
+
+    Optional<Movie> getUniqueMovieByPosition(List<Movie> list, int position) {
+        return list.stream()
+                .filter(movie -> movie.getPosition() == position)
+                .findFirst();
     }
 
     public void ExportFile(Map<Integer, Movie> movieMap, boolean newExcelFormat) throws IOException {
